@@ -29,6 +29,21 @@ const Index = () => {
       {/* HERO */}
       <section className="section hero-gradient relative overflow-hidden pb-24 pt-16 text-foreground">
         <div className="pointer-events-none hero-grid absolute inset-0" aria-hidden="true" />
+
+        {/* animated background orbits */}
+        <div
+          className="pointer-events-none absolute -left-24 top-[-6rem] h-64 w-64 rounded-full bg-primary/30 blur-3xl opacity-60 animate-[spin_28s_linear_infinite]"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -right-20 bottom-[-6rem] h-72 w-72 rounded-full bg-accent/30 blur-3xl opacity-60 animate-[spin_32s_linear_infinite_reverse]"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-x-1/4 top-1/3 h-40 w-40 rounded-full bg-primary/20 blur-3xl opacity-70 animate-pulse"
+          aria-hidden="true"
+        />
+
         <div className="section-inner relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
