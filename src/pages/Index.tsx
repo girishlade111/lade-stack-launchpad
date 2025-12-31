@@ -1,6 +1,13 @@
+import * as React from "react";
 import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowRight,
   Sparkles,
@@ -39,7 +46,35 @@ const staggerItem = {
   visible: { opacity: 1, y: 0 },
 } as const;
 
+const waitlistSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Enter a valid email address" })
+    .max(255, { message: "Email must be under 255 characters" }),
+});
+
+
 const Index = () => {
+  const { toast } = useToast();
+  const [hasJoinedWaitlist, setHasJoinedWaitlist] = React.useState(false);
+
+  const form = useForm<z.infer<typeof waitlistSchema>>({
+    resolver: zodResolver(waitlistSchema),
+    defaultValues: { email: "" },
+  });
+
+  const onSubmit = (values: z.infer<typeof waitlistSchema>) => {
+    // Front-end only: pretend we stored the email successfully.
+    setHasJoinedWaitlist(true);
+    toast({
+      title: "You're on the waitlist",
+      description: "You'll hear from Lade Stack as new products go live.",
+    });
+    form.reset();
+  };
+
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -524,7 +559,7 @@ const Index = () => {
 
       {/* CALL TO ACTION */}
       <section className="section">
-        <div className="section-inner items-center gap-6 text-center md:items-center md:text-left">
+        <div className="section-inner items-center gap-8 text-center md:items-center md:text-left">
           <div className="mx-auto max-w-2xl space-y-4 text-center">
             <span className="section-label">Call to action</span>
             <h2 className="section-heading">Join the next wave of developer tools.</h2>
@@ -534,18 +569,50 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button variant="hero" size="lg" className="hover-scale">
-              <Users className="h-4 w-4" />
-              <span>Follow the Journey</span>
-            </Button>
-            <Button variant="subtle" size="lg" className="hover-scale">
-              <Calendar className="h-4 w-4" />
-              <span>Get Early Access</span>
-            </Button>
+          <div className="mx-auto flex max-w-xl flex-col gap-4">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3 sm:flex-row">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 text-left">
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email to get early access"
+                          autoComplete="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="mt-1 text-xs" />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" variant="hero" className="w-full sm:w-auto">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {hasJoinedWaitlist ? "You're on the list" : "Get Early Access"}
+                </Button>
+              </form>
+            </Form>
+
+            {hasJoinedWaitlist && (
+              <p className="text-xs text-muted-foreground">
+                You’ve joined the Lade Stack waitlist. No spam — just meaningful updates when new products ship.
+              </p>
+            )}
+
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <Users className="h-3.5 w-3.5" />
+                Follow the journey and get early product drops.
+              </span>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* FOOTER */}
       <footer className="border-t border-border/70 bg-background">
