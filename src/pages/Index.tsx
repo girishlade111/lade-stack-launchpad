@@ -18,6 +18,27 @@ import {
   Calendar,
 } from "lucide-react";
 
+const sectionVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 },
+} as const;
+
+const staggerContainer = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+} as const;
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0 },
+} as const;
+
 const Index = () => {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -62,8 +83,8 @@ const Index = () => {
                   Build SaaS Products at Lightning Speed
                 </h1>
                 <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
-                  Lade Stack is an AI-powered ecosystem of tools built for developers, founders, and builders who want
-                  to ship faster without sacrificing architecture, reliability, or UX.
+                  Lade Stack is an AI-powered ecosystem of tools built for developers, founders, and builders who want to
+                  ship faster without sacrificing architecture, reliability, or UX.
                 </p>
               </div>
 
@@ -124,11 +145,11 @@ const Index = () => {
 
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   <div className="rounded-xl bg-secondary/70 px-3 py-2">
-                    <p className="mb-1 font-medium text-xs text-foreground">Execution</p>
+                    <p className="mb-1 text-xs font-medium text-foreground">Execution</p>
                     <p className="text-muted-foreground">Rapid prototyping, shipping in days not months.</p>
                   </div>
                   <div className="rounded-xl bg-secondary/70 px-3 py-2">
-                    <p className="mb-1 font-medium text-xs text-foreground">Systems</p>
+                    <p className="mb-1 text-xs font-medium text-foreground">Systems</p>
                     <p className="text-muted-foreground">Clean architecture built to scale with you.</p>
                   </div>
                 </div>
@@ -144,7 +165,9 @@ const Index = () => {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
               <p className="section-label">Product philosophy</p>
-              <h2 className="section-heading text-sm sm:text-base">A stack designed for builders, not marketing decks.</h2>
+              <h2 className="section-heading text-sm sm:text-base">
+                A stack designed for builders, not marketing decks.
+              </h2>
             </div>
             <p className="max-w-xl text-xs text-muted-foreground sm:text-sm">
               Every decision in Lade Stack starts from the command line and design file: clear APIs, predictable
@@ -177,16 +200,30 @@ const Index = () => {
       {/* PRODUCTS SECTION */}
       <section id="products" className="section-alt">
         <div className="section-inner">
-          <div className="space-y-3">
+          <motion.div
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="space-y-3"
+          >
             <span className="section-label">SaaS Products by Lade Stack</span>
             <h2 className="section-heading">An ecosystem of tools for modern builders.</h2>
             <p className="section-subtitle">
               From AI developer companions to automation pipelines, Lade Stack ships focused utilities that plug into
               your existing workflow.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+          >
             {[
               {
                 title: "AI Developer Tools",
@@ -227,6 +264,7 @@ const Index = () => {
             ].map((product) => (
               <motion.article
                 key={product.title}
+                variants={staggerItem}
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 className="card-elevated flex flex-col justify-between p-5"
@@ -255,30 +293,40 @@ const Index = () => {
                 </div>
               </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* WHY LADE STACK */}
       <section className="section">
-        <div className="section-inner grid gap-10 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-start">
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="section-inner grid gap-10 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-start"
+        >
           <div className="space-y-4">
             <span className="section-label">Why Lade Stack</span>
             <h2 className="section-heading">Built like a product you would design yourself.</h2>
             <p className="section-subtitle">
-              Lade Stack is opinionated about speed, maintainability, and DX. No bloated dashboards, no noisy
-              onboarding — just clear tools that respect your time.
+              Lade Stack is opinionated about speed, maintainability, and DX. No bloated dashboards, no noisy onboarding
+              — just clear tools that respect your time.
             </p>
 
             <div className="grid gap-3 text-sm">
-              {["Built by a full-stack engineer & designer", "Performance and UX as first-class citizens", "No vanity features — only shipping-critical surfaces", "Fast iteration and experimentation with AI-native workflows"].map(
-                (item) => (
-                  <div key={item} className="flex items-start gap-2 rounded-xl bg-secondary/60 px-3 py-2">
-                    <ArrowRight className="mt-0.5 h-3.5 w-3.5 text-primary" />
-                    <p className="text-xs text-muted-foreground sm:text-sm">{item}</p>
-                  </div>
-                ),
-              )}
+              {[
+                "Built by a full-stack engineer & designer",
+                "Performance and UX as first-class citizens",
+                "No vanity features — only shipping-critical surfaces",
+                "Fast iteration and experimentation with AI-native workflows",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-2 rounded-xl bg-secondary/60 px-3 py-2">
+                  <ArrowRight className="mt-0.5 h-3.5 w-3.5 text-primary" />
+                  <p className="text-xs text-muted-foreground sm:text-sm">{item}</p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -291,16 +339,20 @@ const Index = () => {
                 </Badge>
               </div>
               <div className="space-y-2 text-xs text-muted-foreground">
-                {["Design in Figma / whiteboard the flow.", "Prototype UI with Tailwind + shadcn primitives.", "Wire APIs with Next.js, Firebase or Supabase.", "Layer automation and AI with Python & Genkit.", "Push via GitHub, monitor, iterate.",].map(
-                  (step, index) => (
-                    <div key={step} className="flex items-center gap-2">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-medium text-primary">
-                        {index + 1}
-                      </span>
-                      <span>{step}</span>
-                    </div>
-                  ),
-                )}
+                {[
+                  "Design in Figma / whiteboard the flow.",
+                  "Prototype UI with Tailwind + shadcn primitives.",
+                  "Wire APIs with Next.js, Firebase or Supabase.",
+                  "Layer automation and AI with Python & Genkit.",
+                  "Push via GitHub, monitor, iterate.",
+                ].map((step, index) => (
+                  <div key={step} className="flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-medium text-primary">
+                      {index + 1}
+                    </span>
+                    <span>{step}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -312,7 +364,7 @@ const Index = () => {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ABOUT THE FOUNDER */}
@@ -389,14 +441,13 @@ const Index = () => {
               { label: "Flutter", icon: Cpu },
               { label: "Firebase", icon: Server },
               { label: "Supabase", icon: Server },
-              { label: "Python", icon: Code2 },
-              { label: "REST APIs", icon: Workflow },
+              { label: "Python", icon: Cpu },
+              { label: "REST APIs", icon: Server },
               { label: "GitHub", icon: GitBranch },
-              { label: "AI / LLMs", icon: Bot },
             ].map((item) => (
               <div
                 key={item.label}
-                className="hover-scale flex items-center justify-between rounded-xl border border-border/70 bg-card/80 px-3 py-2 text-xs"
+                className="card-elevated flex items-center justify-between gap-2 p-3 text-sm sm:text-[13px]"
               >
                 <div className="flex items-center gap-2">
                   <item.icon className="h-3.5 w-3.5 text-primary" />
@@ -412,15 +463,29 @@ const Index = () => {
       {/* VISION & ROADMAP */}
       <section className="section-alt">
         <div className="section-inner space-y-6">
-          <div className="space-y-3">
+          <motion.div
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="space-y-3"
+          >
             <span className="section-label">Vision &amp; roadmap</span>
             <h2 className="section-heading">Where Lade Stack is headed.</h2>
             <p className="section-subtitle">
               A calm, open ecosystem for developers — from prototypes to production workloads.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-4 md:grid-cols-5">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="grid gap-4 md:grid-cols-5"
+          >
             {[
               {
                 title: "Open SaaS ecosystem",
@@ -443,13 +508,17 @@ const Index = () => {
                 copy: "Clear, example-driven docs and playbooks for each product.",
               },
             ].map((step, index) => (
-              <div key={step.title} className="card-elevated flex flex-col gap-2 p-4">
+              <motion.div
+                key={step.title}
+                variants={staggerItem}
+                className="card-elevated flex flex-col gap-2 p-4"
+              >
                 <span className="text-[11px] font-medium text-muted-foreground">Step {index + 1}</span>
                 <p className="text-sm font-medium">{step.title}</p>
                 <p className="text-xs text-muted-foreground">{step.copy}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
